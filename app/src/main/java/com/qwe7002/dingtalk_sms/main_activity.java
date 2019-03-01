@@ -83,7 +83,7 @@ public class main_activity extends AppCompatActivity {
         save_button.setOnClickListener(v -> {
 
             if (bot_token.getText().toString().isEmpty()) {
-                Snackbar.make(v, R.string.chat_id_or_token_not_config, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(v, R.string.token_not_configure, Snackbar.LENGTH_LONG).show();
                 return;
             }
             if (fallback_sms.isChecked() && trusted_phone_number.getText().toString().isEmpty()) {
@@ -112,7 +112,10 @@ public class main_activity extends AppCompatActivity {
             progress_dialog.show();
             String request_uri = bot_token.getText().toString().trim();
             request_json request_body = new request_json();
-            request_body.text = getString(R.string.system_message_head) + "\n" + getString(R.string.success_connect);
+            String Content= getString(R.string.system_message_head) + "\n" + getString(R.string.success_connect);
+            JsonObject object = new JsonObject();
+            object.addProperty("content",Content);
+            request_body.text =object;
             Gson gson = new Gson();
             String request_body_raw = gson.toJson(request_body);
             RequestBody body = RequestBody.create(public_func.JSON, request_body_raw);
