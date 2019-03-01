@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+apply from: 'version.gradle'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        applicationId "com.qwe7002.telegram_sms"
+        minSdkVersion 22
+        targetSdkVersion 28
+        versionCode appVersionCode
+        versionName appVersionName
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    signingConfigs {
+        releaseConfig {
+            storeFile file("keys.jks")
+            storePassword project.hasProperty("KEYSTORE_PASS") ? KEYSTORE_PASS : System.getenv("KEYSTORE_PASS")
+            keyAlias project.hasProperty("ALIAS_NAME") ? ALIAS_NAME : System.getenv("ALIAS_NAME")
+            keyPassword project.hasProperty("ALIAS_PASS") ? ALIAS_PASS : System.getenv("ALIAS_PASS")
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.releaseConfig
+        }
+    }
+}
+
+dependencies {
+    //noinspection GradleDynamicVersion
+    implementation 'com.android.support:appcompat-v7:28+'
+    //noinspection GradleDynamicVersion
+    implementation 'com.android.support.constraint:constraint-layout:1+'
+    //noinspection GradleDynamicVersion
+    implementation 'com.android.support:design:28+'
+    //noinspection GradleDynamicVersion
+    implementation 'com.squareup.okhttp3:okhttp:+'
+    //noinspection GradleDynamicVersion
+    implementation 'com.google.code.gson:gson:+'
+}
