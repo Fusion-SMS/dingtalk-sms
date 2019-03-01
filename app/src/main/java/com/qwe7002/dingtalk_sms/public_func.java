@@ -22,10 +22,6 @@ import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -207,26 +203,14 @@ class public_func {
         Log.i(public_func.log_tag, log);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date ts = new Date(System.currentTimeMillis());
-        String error_log = read_file(context, "error.log") + "\n" + simpleDateFormat.format(ts) + " " + log;
+        String error_log = read_file(context) + "\n" + simpleDateFormat.format(ts) + " " + log;
         write_file(context, "error.log", error_log);
     }
 
     static String read_log(Context context) {
-        return read_file(context, "error.log");
+        return read_file(context);
     }
 
-    static void add_message_list(Context context, String message_id, String phone, int slot) {
-        String message_list_raw = public_func.read_file(context, "message.json");
-        if (message_list_raw.length() == 0) {
-            message_list_raw = "{}";
-        }
-        JsonObject message_list_obj = new JsonParser().parse(message_list_raw).getAsJsonObject();
-        JsonObject object = new JsonObject();
-        object.addProperty("phone", phone);
-        object.addProperty("card", slot);
-        message_list_obj.add(message_id, object);
-        public_func.write_file(context, "message.json", new Gson().toJson(message_list_obj));
-    }
     static void write_file(Context context, String file_name, String write_string) {
         try {
             FileOutputStream file_stream = context.openFileOutput(file_name, MODE_PRIVATE);
@@ -238,10 +222,10 @@ class public_func {
         }
     }
 
-    private static String read_file(Context context, String file_name) {
+    private static String read_file(Context context) {
         String result = "";
         try {
-            FileInputStream file_stream = context.openFileInput(file_name);
+            FileInputStream file_stream = context.openFileInput("error.log");
             int length = file_stream.available();
             byte[] buffer = new byte[length];
             file_stream.read(buffer);

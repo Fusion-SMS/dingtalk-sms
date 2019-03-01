@@ -79,10 +79,7 @@ class call_state_listener extends PhoneStateListener {
             return;
         }
         String bot_token = sharedPreferences.getString("bot_token", "");
-        String chat_id = sharedPreferences.getString("chat_id", "");
-        String request_uri = public_func.get_url(bot_token, "sendMessage");
         final request_json request_body = new request_json();
-        request_body.chat_id = chat_id;
         String display_address = incoming_number;
         if (display_address != null) {
             String display_name = public_func.get_contact_name(context, incoming_number);
@@ -99,12 +96,16 @@ class call_state_listener extends PhoneStateListener {
             }
         }
 
-        request_body.text = "[" + dual_sim + context.getString(R.string.missed_call_head) + "]" + "\n" + context.getString(R.string.Incoming_number) + display_address;
+        String Content = "[" + dual_sim + context.getString(R.string.missed_call_head) + "]" + "\n" + context.getString(R.string.Incoming_number) + display_address;
+        JsonObject object = new JsonObject();
+        object.addProperty("content",Content);
+        request_body.text =object;
         Gson gson = new Gson();
         String request_body_raw = gson.toJson(request_body);
         RequestBody body = RequestBody.create(public_func.JSON, request_body_raw);
         OkHttpClient okhttp_client = public_func.get_okhttp_obj();
-        Request request = new Request.Builder().url(request_uri).method("POST", body).build();
+        assert bot_token != null;
+        Request request = new Request.Builder().url(bot_token).method("POST", body).build();
         Call call = okhttp_client.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -114,9 +115,8 @@ class call_state_listener extends PhoneStateListener {
                 if (checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
                     if (sharedPreferences.getBoolean("fallback_sms", false)) {
                         String msg_send_to = sharedPreferences.getString("trusted_phone_number", null);
-                        String msg_send_content = request_body.text;
                         if (msg_send_to != null) {
-                            public_func.send_sms(context, msg_send_to, msg_send_content, -1);
+                            public_func.send_sms(context, msg_send_to, Content, -1);
                         }
                     }
                 }
@@ -128,13 +128,6 @@ class call_state_listener extends PhoneStateListener {
                     assert response.body() != null;
                     String error_message = "Send missed call error:" + response.body().string();
                     public_func.write_log(context, error_message);
-                }
-                if (response.code() == 200) {
-                    assert response.body() != null;
-                    String result = response.body().string();
-                    JsonObject result_obj = new JsonParser().parse(result).getAsJsonObject().get("result").getAsJsonObject();
-                    String message_id = result_obj.get("message_id").getAsString();
-                    public_func.add_message_list(context, message_id, incoming_number, slot);
                 }
             }
         });

@@ -44,7 +44,6 @@ public class logcat_activity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         public_func.write_file(context, "error.log", "");
-        public_func.write_file(context, "message.json", "{}");
         return true;
     }
 

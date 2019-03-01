@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -31,7 +32,6 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 public class battery_monitoring_service extends Service {
     battery_receiver receiver = null;
     static String bot_token;
-    static String chat_id;
     static Boolean fallback;
     static String trusted_phone_number;
     Context context;
@@ -48,7 +48,6 @@ public class battery_monitoring_service extends Service {
         if (!sharedPreferences.getBoolean("battery_monitoring_switch", false)) {
             stopSelf();
         }
-        chat_id = sharedPreferences.getString("chat_id", "");
         bot_token = sharedPreferences.getString("bot_token", "");
         fallback = sharedPreferences.getBoolean("fallback_sms", false);
         trusted_phone_number = sharedPreferences.getString("trusted_phone_number", null);
@@ -89,9 +88,8 @@ class battery_receiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        String request_uri = public_func.get_url(battery_monitoring_service.bot_token, "sendMessage");
+        String request_uri = battery_monitoring_service.bot_token;
         final request_json request_body = new request_json();
-        request_body.chat_id = battery_monitoring_service.chat_id;
         StringBuilder prebody = new StringBuilder(context.getString(R.string.system_message_head) + "\n");
         final String action = intent.getAction();
         BatteryManager batteryManager = (BatteryManager) context.getSystemService(BATTERY_SERVICE);
@@ -109,7 +107,10 @@ class battery_receiver extends BroadcastReceiver {
                 prebody = prebody.append(context.getString(R.string.ac_disconnect));
                 break;
         }
-        request_body.text = prebody.append("\n").append(context.getString(R.string.current_battery_level)).append(batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)).append("%").toString();
+        String Content = prebody.append("\n").append(context.getString(R.string.current_battery_level)).append(batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)).append("%").toString();
+        JsonObject object = new JsonObject();
+        object.addProperty("content",Content);
+        request_body.text =object;
         Gson gson = new Gson();
         String request_body_raw = gson.toJson(request_body);
         RequestBody body = RequestBody.create(public_func.JSON, request_body_raw);
@@ -124,9 +125,8 @@ class battery_receiver extends BroadcastReceiver {
                     if (checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
                         if (battery_monitoring_service.fallback) {
                             String msg_send_to = battery_monitoring_service.trusted_phone_number;
-                            String msg_send_content = request_body.text;
                             if (msg_send_to != null) {
-                                public_func.send_sms(context, msg_send_to, msg_send_content, -1);
+                                public_func.send_sms(context, msg_send_to, Content, -1);
                             }
                         }
                     }

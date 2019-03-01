@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        applicationId "com.qwe7002.telegram_sms"
+        applicationId "com.qwe7002.dingtalk_sms"
         minSdkVersion 22
         targetSdkVersion 28
         versionCode appVersionCode

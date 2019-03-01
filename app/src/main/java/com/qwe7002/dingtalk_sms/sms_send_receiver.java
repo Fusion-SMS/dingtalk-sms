@@ -12,6 +12,7 @@ import android.telephony.SmsManager;
 import android.telephony.SubscriptionManager;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -36,10 +37,7 @@ public class sms_send_receiver extends BroadcastReceiver {
             return;
         }
         String bot_token = sharedPreferences.getString("bot_token", "");
-        String chat_id = sharedPreferences.getString("chat_id", "");
-        String request_uri = public_func.get_url(bot_token, "sendMessage");
         final request_json request_body = new request_json();
-        request_body.chat_id = chat_id;
         SubscriptionManager manager = SubscriptionManager.from(context);
         String dual_sim = "";
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
@@ -66,26 +64,31 @@ public class sms_send_receiver extends BroadcastReceiver {
             display_to_address = display_to_name + "(" + send_to + ")";
         }
         String content = Objects.requireNonNull(intent.getExtras()).getString("content");
-        request_body.text = "[" + dual_sim + context.getString(R.string.send_sms_head) + "]" + "\n" + context.getString(R.string.to) + display_to_address + "\n" + context.getString(R.string.content) + content + "\n" + context.getString(R.string.status);
+
+        String Content = "[" + dual_sim + context.getString(R.string.send_sms_head) + "]" + "\n" + context.getString(R.string.to) + display_to_address + "\n" + context.getString(R.string.content) + content + "\n" + context.getString(R.string.status);
         switch (getResultCode()) {
             case Activity.RESULT_OK:
-                request_body.text += context.getString(R.string.success);
+                Content += context.getString(R.string.success);
                 break;
             case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                request_body.text += context.getString(R.string.send_failed);
+                Content += context.getString(R.string.send_failed);
                 break;
             case SmsManager.RESULT_ERROR_RADIO_OFF:
-                request_body.text += context.getString(R.string.airplan_mode);
+                Content += context.getString(R.string.airplan_mode);
                 break;
             case SmsManager.RESULT_ERROR_NO_SERVICE:
-                request_body.text += context.getString(R.string.no_network);
+                Content += context.getString(R.string.no_network);
                 break;
         }
+        JsonObject object = new JsonObject();
+        object.addProperty("content",Content);
+        request_body.text =object;
         Gson gson = new Gson();
         String request_body_raw = gson.toJson(request_body);
         RequestBody body = RequestBody.create(public_func.JSON, request_body_raw);
         OkHttpClient okhttp_client = public_func.get_okhttp_obj();
-        Request request = new Request.Builder().url(request_uri).method("POST", body).build();
+        assert bot_token != null;
+        Request request = new Request.Builder().url(bot_token).method("POST", body).build();
         Call call = okhttp_client.newCall(request);
         call.enqueue(new Callback() {
             @Override
