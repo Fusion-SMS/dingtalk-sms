@@ -1,9 +1,8 @@
 # Telegram SMS
 
-![pipeline status](https://badges.git.reallct.com/qwe7002/telegram-sms/badges/master/pipeline.svg)
+![pipeline status](https://badges.git.reallct.com/qwe7002/dingtalk-sms/badges/master/pipeline.svg)
 ![Min Android Version](https://img.shields.io/badge/android-22+-orange.svg)
-[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/qwe7002/telegram-sms/blob/master/LICENSE)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fqwe7002%2Ftelegram-sms.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fqwe7002%2Ftelegram-sms?ref=badge_shield)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/qwe7002/dingtalk-sms/blob/master/LICENSE)
 
 A robot running on your Android device.
 
@@ -35,16 +34,7 @@ This app requires the following permissions:
 
 You can set this app as the default SMS app, which will block all SMS notifications and automatically set the SMS to read.
 
-## User manual
-
-- [English](https://github.com/qwe7002/telegram-sms/wiki/User_manual)
-- [简体中文](https://github.com/qwe7002/telegram-sms/wiki/用户手册)
-- [繁體中文](https://github.com/qwe7002/telegram-sms/wiki/用戶手冊)
-- 日本語(WIP)
-
 ## License
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fqwe7002%2Ftelegram-sms.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fqwe7002%2Ftelegram-sms?ref=badge_large)
 
 BSD 3-Clause License
 
