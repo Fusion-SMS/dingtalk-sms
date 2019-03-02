@@ -1,98 +1,65 @@
-# Telegram SMS
+# DingTalk SMS
 
 ![pipeline status](https://badges.git.reallct.com/qwe7002/dingtalk-sms/badges/master/pipeline.svg)
 ![Min Android Version](https://img.shields.io/badge/android-22+-orange.svg)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/qwe7002/dingtalk-sms/blob/master/LICENSE)
 
-A robot running on your Android device.
+在Android设备上运行的机器人。
 
-[Download](https://github.com/qwe7002/telegram-sms/releases)
+[下载](https://github.com/qwe7002/telegram-sms/releases)
 
-**There may be unknown bugs in the pre-release version,Please use at your own risk.**
+**预发布版本中可能存在未知错误，请自行承担风险。**
 
-## Features
+＃＃ 特征
 
-- Forward SMS to Telegram
+ - 转发短信到钉钉
 
-- Monitor missed calls
+ - 监控未接来电
 
-- Monitor device battery power changes
+ - 监控设备电池电量变化
 
-- Remote control via chat command \ SMS.
+ - 通过聊天命令\ SMS进行远程控制。
 
-## Permission
+##权限
 
-This app requires the following permissions:
+此应用需要以下权限：
 
-- SMS : Read and send a text message.
+ - 短信：阅读并发送短信。
 
-- Phone : Get whether it is a dual card phone, card status and identifier ID.
+ - 电话：获取是否是双卡电话，卡状态和标识符ID。
 
-- Call log : Get the incoming number.
+ - 通话记录：获取来电号码。
 
-- Contact : Get the contact information and automatically identify the incoming caller's number.
+ - 联系人：获取联系信息并自动识别来电者的号码。
 
-You can set this app as the default SMS app, which will block all SMS notifications and automatically set the SMS to read.
+您可以将此应用程序设置为默认的SMS应用程序，它将阻止所有SMS通知并自动设置要读取的SMS。
 
-## License
+##致谢
 
-BSD 3-Clause License
+该软件使用以下开源库：
 
-Copyright (c) 2018, qwe7002
-All rights reserved.
+ -  [okhttp](https://github.com/square/okhttp)
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+ -  [Gson](https://github.com/google/gson)
 
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
+这个软件的诞生离不开他们的帮助：
 
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
+ -  [@SumiMakito](https://github.com/SumiMakito)
 
-* Neither the name of the copyright holder nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
+ -  [@zsxsoft](https://github.com/zsxsoft)
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+以下组织为此页面提供图像存储：
 
+ -  [sm.ms](https://sm.ms)
 
-## Acknowledgements
+## 给一杯咖啡让我更好地维护这个项目？
 
-This software uses these open source libraries:
+ -  [Paypal](https://paypal.me/qwe7002)
 
-- [okhttp](https://github.com/square/okhttp)
+ - Payoneer (qwe7002@hotmail.com)
 
-- [Gson](https://github.com/google/gson)
+ - 比特币(**17wmCCzy7hSSENnRBfUBMUSi7kdHYePrae**)
 
-The birth of this software is inseparable from their help:
+ -  [云闪付](https://static.reallct.com/2019/02/21/5c6d812840bac.png)
 
-- [@SumiMakito](https://github.com/SumiMakito)
-
-- [@zsxsoft](https://github.com/zsxsoft)
-
-The following organizations for providing image storage for this page:
-
-- [sm.ms](https://sm.ms)
-
-## Give a cup of coffee and let me better maintain this project?
-
-- [Support me in Paypal](https://paypal.me/qwe7002)
-
-- Support me in Payoneer (qwe7002@hotmail.com)
-
-- Support me in Bitcoin (**17wmCCzy7hSSENnRBfUBMUSi7kdHYePrae**)
-
-- [Support me in Cloud QuickPass](https://static.reallct.com/2019/02/21/5c6d812840bac.png)
-
-Your donation will make me work better for this project.
+您的捐款将使我更好地完成这个项目。
