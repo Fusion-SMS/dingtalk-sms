@@ -14,20 +14,16 @@ import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -58,7 +54,7 @@ public class main_activity extends AppCompatActivity {
         String bot_token_save = sharedPreferences.getString("bot_token", "");
         assert bot_token_save != null;
         if (sharedPreferences.getBoolean("initialized", false)) {
-            public_func.start_service(context);
+            public_func.start_service(context, sharedPreferences.getBoolean("battery_monitoring_switch", false));
             boolean display_dual_sim_display_name_config = sharedPreferences.getBoolean("display_dual_sim_display_name", false);
             if (public_func.get_active_card(context) < 2) {
                 display_dual_sim_display_name.setEnabled(false);
@@ -160,7 +156,8 @@ public class main_activity extends AppCompatActivity {
                     editor.apply();
                     Snackbar.make(v, R.string.success, Snackbar.LENGTH_LONG)
                             .show();
-                    public_func.start_service(context);
+                    public_func.stop_all_service(context);
+                    public_func.start_service(context, battery_monitoring_switch.isChecked());
                     Looper.loop();
 
 

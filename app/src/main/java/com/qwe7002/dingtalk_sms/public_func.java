@@ -38,6 +38,7 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 class public_func {
     private static final String log_tag = "DingTalk-sms";
+    static final String boardcast_stop_service = "com.qwe7002.dingtalk_sms.stop_all";
     static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     static String get_send_phone_number(String phone_number) {
@@ -127,13 +128,18 @@ class public_func {
         return notification;
     }
 
-    static void start_service(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("data", MODE_PRIVATE);
-        Intent battery_service = new Intent(context, battery_monitoring_service.class);
-        boolean battery_switch = sharedPreferences.getBoolean("battery_monitoring_switch", false);
-        if (!sharedPreferences.getBoolean("initialized", false)) {
-            return;
+    static void stop_all_service(Context context) {
+        Intent intent = new Intent(boardcast_stop_service);
+        context.sendBroadcast(intent);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+    }
+
+    static void start_service(Context context, Boolean battery_switch) {
+        Intent battery_service = new Intent(context, battery_monitoring_service.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (battery_switch) {
                 context.startForegroundService(battery_service);
