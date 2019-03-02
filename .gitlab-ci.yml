@@ -13,7 +13,7 @@ push_github:
   only:
   - develop
   script:
-  - git push -f --set-upstream https://${github_key}@github.com/qwe7002/telegram-sms.git HEAD:refs/heads/$CI_COMMIT_REF_NAME
+  - git push -f --set-upstream https://${github_key}@github.com/qwe7002/dingtalk-sms.git HEAD:refs/heads/$CI_COMMIT_REF_NAME
 
 release_github:
   dependencies:
@@ -22,11 +22,8 @@ release_github:
   - master
   stage: deploy
   script:
-  - git push --set-upstream https://${github_key}@github.com/qwe7002/telegram-sms.git HEAD:refs/heads/$CI_COMMIT_REF_NAME
-  - git clone https://git.reallserver.cn/qwe7002/telegram-sms.wiki.git wiki
-  - cd wiki
-  - git push -f --set-upstream https://${github_key}@github.com/qwe7002/telegram-sms.wiki.git HEAD:refs/heads/$CI_COMMIT_REF_NAME
-  - /opt/github-release-upload.sh github_api_token=${github_key} owner=qwe7002 repo=telegram-sms tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk"
+  - git push --set-upstream https://${github_key}@github.com/qwe7002/dingtalk-sms.git HEAD:refs/heads/$CI_COMMIT_REF_NAME
+  - /opt/github-release-upload.sh github_api_token=${github_key} owner=qwe7002 repo=dingtalk-sms tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk"
 
 
 build:
