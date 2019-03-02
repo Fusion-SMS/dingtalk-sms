@@ -50,9 +50,9 @@
 cxll
 ```
 
-它会将内容`cxll`的短信发送到号码`10086`。
+它会将内容 `cxll` 的短信发送到号码 `10086` 。
 
-您可以通过发送命令`restart-service`重新启动所有后台进程
+您可以通过发送命令 `restart-service` 重新启动所有后台进程
 
 **如果您不在当前区域，请添加您的国家/地区呼叫区号（例如，中国大陆国际区号：+86）。**
 
@@ -77,10 +77,8 @@ cxll
 ## 给一杯咖啡让我更好地维护这个项目？
 
  -  [Paypal](https://paypal.me/qwe7002)
-
- - Payoneer (qwe7002@hotmail.com)
-
- - 比特币(**17wmCCzy7hSSENnRBfUBMUSi7kdHYePrae**)
+ 
+ -  比特币 [**17wmCCzy7hSSENnRBfUBMUSi7kdHYePrae**]
 
  -  [云闪付](https://static.reallct.com/2019/02/21/5c6d812840bac.png)
 
