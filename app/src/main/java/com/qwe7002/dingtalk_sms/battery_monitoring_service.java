@@ -31,7 +31,8 @@ import static android.content.Context.BATTERY_SERVICE;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 public class battery_monitoring_service extends Service {
-    battery_receiver receiver = null;
+    private battery_receiver battery_receiver = null;
+    private stop_broadcast_receiver stop_broadcast_receiver = null;
     static String bot_token;
     static Boolean fallback;
     static String trusted_phone_number;
@@ -57,26 +58,40 @@ public class battery_monitoring_service extends Service {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        receiver = new battery_receiver();
+        IntentFilter intentFilter = new IntentFilter(public_func.boardcast_stop_service);
+        stop_broadcast_receiver = new stop_broadcast_receiver();
+
+        battery_receiver = new battery_receiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_OKAY);
         filter.addAction(Intent.ACTION_BATTERY_LOW);
         filter.addAction(Intent.ACTION_POWER_CONNECTED);
         filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
-        registerReceiver(receiver, filter);
+
+        registerReceiver(battery_receiver, filter);
+        registerReceiver(stop_broadcast_receiver, intentFilter);
 
     }
 
     @Override
     public void onDestroy() {
+        unregisterReceiver(battery_receiver);
+        unregisterReceiver(stop_broadcast_receiver);
         stopForeground(true);
-        unregisterReceiver(receiver);
         super.onDestroy();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    class stop_broadcast_receiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            stopSelf();
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
     }
 
 }

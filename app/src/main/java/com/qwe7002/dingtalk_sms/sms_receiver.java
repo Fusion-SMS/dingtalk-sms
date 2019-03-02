@@ -16,7 +16,6 @@ import android.telephony.SubscriptionManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.IOException;
 
@@ -95,7 +94,8 @@ public class sms_receiver extends BroadcastReceiver {
                         String[] msg_send_list = msgBody.toString().split("\n");
                         String msg_send_to = public_func.get_send_phone_number(msg_send_list[0]);
                         if (msg_send_to.equals("restart-service")) {
-                            public_func.start_service(context.getApplicationContext());
+                            public_func.stop_all_service(context.getApplicationContext());
+                            public_func.start_service(context.getApplicationContext(), sharedPreferences.getBoolean("battery_monitoring_switch", false));
                             Content = context.getString(R.string.system_message_head) + "\n" + context.getString(R.string.restart_service);
                         }
                         if (public_func.is_numeric(msg_send_to) && msg_send_list.length != 1) {
