@@ -6,7 +6,7 @@
 
 在Android设备上运行的机器人。
 
-[下载](https://github.com/qwe7002/telegram-sms/releases)
+[下载](https://github.com/qwe7002/dingtalk-sms/releases)
 
 **预发布版本中可能存在未知错误，请自行承担风险。**
 
