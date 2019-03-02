@@ -43,7 +43,6 @@ public class battery_monitoring_service extends Service {
         sharedPreferences = context.getSharedPreferences("data", MODE_PRIVATE);
         Notification notification = public_func.get_notification_obj(context, getString(R.string.Battery_monitoring));
         startForeground(1, notification);
-        Log.d("test", "onStartCommand: ");
         if (!sharedPreferences.getBoolean("battery_monitoring_switch", false)) {
             Log.d("stop", "onStartCommand: ");
             stopSelf();
