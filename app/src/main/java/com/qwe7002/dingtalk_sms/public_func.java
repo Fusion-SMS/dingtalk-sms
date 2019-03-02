@@ -127,7 +127,8 @@ class public_func {
         return notification;
     }
 
-    static void start_service(Context context, SharedPreferences sharedPreferences) {
+    static void start_service(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("data", MODE_PRIVATE);
         Intent battery_service = new Intent(context, battery_monitoring_service.class);
         boolean battery_switch = sharedPreferences.getBoolean("battery_monitoring_switch", false);
         if (!sharedPreferences.getBoolean("initialized", false)) {
