@@ -37,7 +37,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 class public_func {
-    private static final String log_tag = "telegram-sms";
+    private static final String log_tag = "DingTalk-sms";
     static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     static String get_send_phone_number(String phone_number) {
@@ -130,6 +130,9 @@ class public_func {
     static void start_service(Context context, SharedPreferences sharedPreferences) {
         Intent battery_service = new Intent(context, battery_monitoring_service.class);
         boolean battery_switch = sharedPreferences.getBoolean("battery_monitoring_switch", false);
+        if (!sharedPreferences.getBoolean("initialized", false)) {
+            return;
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (battery_switch) {
                 context.startForegroundService(battery_service);

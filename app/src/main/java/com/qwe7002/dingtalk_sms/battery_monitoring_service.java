@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.os.BatteryManager;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -35,17 +36,16 @@ public class battery_monitoring_service extends Service {
     static Boolean fallback;
     static String trusted_phone_number;
     Context context;
-    SharedPreferences sharedPreferences;
+    static SharedPreferences sharedPreferences;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        sharedPreferences = context.getSharedPreferences("data", MODE_PRIVATE);
         Notification notification = public_func.get_notification_obj(context, getString(R.string.Battery_monitoring));
         startForeground(1, notification);
-        if (!sharedPreferences.getBoolean("initialized", false)) {
-            public_func.write_log(context, "Battery Monitoring:Uninitialized");
-            stopSelf();
-        }
+        Log.d("test", "onStartCommand: ");
         if (!sharedPreferences.getBoolean("battery_monitoring_switch", false)) {
+            Log.d("stop", "onStartCommand: ");
             stopSelf();
         }
         bot_token = sharedPreferences.getString("bot_token", "");
@@ -58,7 +58,6 @@ public class battery_monitoring_service extends Service {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        sharedPreferences = context.getSharedPreferences("data", MODE_PRIVATE);
         receiver = new battery_receiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_OKAY);
@@ -88,7 +87,6 @@ class battery_receiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        String request_uri = battery_monitoring_service.bot_token;
         final request_json request_body = new request_json();
         StringBuilder prebody = new StringBuilder(context.getString(R.string.system_message_head) + "\n");
         final String action = intent.getAction();
@@ -114,7 +112,7 @@ class battery_receiver extends BroadcastReceiver {
         Gson gson = new Gson();
         String request_body_raw = gson.toJson(request_body);
         RequestBody body = RequestBody.create(public_func.JSON, request_body_raw);
-        Request request = new Request.Builder().url(request_uri).method("POST", body).build();
+        Request request = new Request.Builder().url(battery_monitoring_service.bot_token).method("POST", body).build();
         Call call = okhttp_client.newCall(request);
         call.enqueue(new Callback() {
             @Override
