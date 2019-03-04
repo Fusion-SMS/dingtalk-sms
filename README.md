@@ -12,25 +12,25 @@
 
 ## 特征
 
- - 转发短信到钉钉
+- 转发短信到钉钉
 
- - 监控未接来电
+- 监控未接来电
 
- - 监控设备电池电量变化
+- 监控设备电池电量变化
 
- - 通过SMS进行远程控制。
+- 通过SMS进行远程控制。
 
 ## 权限
 
 此应用需要以下权限：
 
- - 短信：阅读并发送短信。
+- 短信：阅读并发送短信。
 
- - 电话：获取是否是双卡电话，卡状态和标识符ID。
+- 电话：获取是否是双卡电话，卡状态和标识符ID。
 
- - 通话记录：获取来电号码。
+- 通话记录：获取来电号码。
 
- - 联系人：获取联系信息并自动识别来电者的号码。
+- 联系人：获取联系信息并自动识别来电者的号码。
 
 您可以将此应用程序设置为默认的短信应用程序，它将阻止所有短信通知并自动设置为已读取。
 
@@ -60,26 +60,28 @@ cxll
 
 该软件使用以下开源库：
 
- -  [okhttp](https://github.com/square/okhttp)
+- [okhttp](https://github.com/square/okhttp)
 
- -  [Gson](https://github.com/google/gson)
+- [Gson](https://github.com/google/gson)
 
 这个软件的诞生离不开他们的帮助：
 
- -  [@SumiMakito](https://github.com/SumiMakito)
+- [@SumiMakito](https://github.com/SumiMakito)
 
- -  [@zsxsoft](https://github.com/zsxsoft)
+- [@zsxsoft](https://github.com/zsxsoft)
 
 以下组织为此页面提供图像存储：
 
- -  [sm.ms](https://sm.ms)
+- [sm.ms](https://sm.ms)
 
 ## 给一杯咖啡让我更好地维护这个项目？
 
- -  [Paypal](https://paypal.me/qwe7002)
+- [Paypal](https://paypal.me/qwe7002)
  
- -  比特币 [**17wmCCzy7hSSENnRBfUBMUSi7kdHYePrae**]
+- 比特币 [**17wmCCzy7hSSENnRBfUBMUSi7kdHYePrae**]
 
- -  [云闪付](https://static.reallct.com/2019/02/21/5c6d812840bac.png)
+- [支付宝](https://i.loli.net/2019/03/05/5c7d4ebc3e1f0.jpg)
+
+- [云闪付](https://static.reallct.com/2019/02/21/5c6d812840bac.png)
 
 您的捐款将使我更好地完成这个项目。
