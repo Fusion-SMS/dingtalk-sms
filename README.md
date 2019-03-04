@@ -80,8 +80,8 @@ cxll
  
 - 比特币 [**17wmCCzy7hSSENnRBfUBMUSi7kdHYePrae**]
 
-- [支付宝](https://i.loli.net/2019/03/05/5c7d4ebc3e1f0.jpg)
-
 - [云闪付](https://static.reallct.com/2019/02/21/5c6d812840bac.png)
+
+- [支付宝](https://static.reallct.com/2019/03/05/5c7d4ebc3e1f0.jpg)
 
 您的捐款将使我更好地完成这个项目。
