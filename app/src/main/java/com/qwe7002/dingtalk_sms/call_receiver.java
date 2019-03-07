@@ -116,7 +116,7 @@ class call_state_listener extends PhoneStateListener {
                     if (sharedPreferences.getBoolean("fallback_sms", false)) {
                         String msg_send_to = sharedPreferences.getString("trusted_phone_number", null);
                         if (msg_send_to != null) {
-                            public_func.send_sms(context, msg_send_to, Content, -1);
+                            public_func.send_fallback_sms(msg_send_to, Content, -1);
                         }
                     }
                 }
