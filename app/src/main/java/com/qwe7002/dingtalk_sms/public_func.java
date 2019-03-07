@@ -93,6 +93,16 @@ class public_func {
         send_receiver_list.add(sentIntent);
         sms_manager.sendMultipartTextMessage(send_to, null, divideContents, send_receiver_list, null);
     }
+    static void send_fallback_sms(String send_to, String content, int sub_id) {
+        android.telephony.SmsManager sms_manager;
+        if (sub_id == -1) {
+            sms_manager = SmsManager.getDefault();
+        } else {
+            sms_manager = SmsManager.getSmsManagerForSubscriptionId(sub_id);
+        }
+        ArrayList<String> divideContents = sms_manager.divideMessage(content);
+        sms_manager.sendMultipartTextMessage(send_to, null, divideContents, null, null);
+    }
 
 
     static Notification get_notification_obj(Context context, String notification_name) {
