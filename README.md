@@ -6,6 +6,8 @@
 
 在Android设备上运行的机器人。
 
+您可以在 https://reall.uk 上发布Issue和讨论问题。
+
 [下载](https://github.com/qwe7002/dingtalk-sms/releases)
 
 **预发布版本中可能存在未知错误，请自行承担风险。**
@@ -76,7 +78,7 @@ cxll
 
 ## 给一杯咖啡让我更好地维护这个项目？
 
-- [Paypal](https://paypal.me/qwe7002)
+- [Paypal](https://paypal.me/nicoranshi)
  
 - 比特币 [**17wmCCzy7hSSENnRBfUBMUSi7kdHYePrae**]
 
