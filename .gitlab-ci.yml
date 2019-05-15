@@ -17,7 +17,7 @@ release_github:
   stage: deploy
   script:
   - git push --set-upstream https://${github_key}@github.com/telegram-sms/dingtalk-sms.git HEAD:refs/heads/$CI_COMMIT_REF_NAME
-  - /opt/github-release-upload.sh github_api_token=${github_key} owner=telegram-sms repo=dingtalk-sms tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk"
+  - /opt/github-release-upload.sh github_api_token=${github_key} owner=telegram-sms repo=dingtalk-sms tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk" pre_release="false"
 
 
 build:
