@@ -8,12 +8,6 @@ cache:
   paths:
   - .gradle/
 
-push_github:
-  stage: push
-  only:
-  - develop
-  script:
-  - git push -f --set-upstream https://${github_key}@github.com/qwe7002/dingtalk-sms.git HEAD:refs/heads/$CI_COMMIT_REF_NAME
 
 release_github:
   dependencies:
