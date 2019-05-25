@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -43,25 +45,31 @@ public class sms_receiver extends BroadcastReceiver {
                 return;
             }
         }
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
             String dual_sim = "";
             SubscriptionManager manager = SubscriptionManager.from(context);
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                 if (manager.getActiveSubscriptionInfoCount() >= 2) {
-                    int slot = bundle.getInt("slot", -1);
+                    int slot = extras.getInt("slot", -1);
                     if (slot != -1) {
                         String display_name = public_func.get_sim_name_title(context, sharedPreferences, slot);
                         dual_sim = "SIM" + (slot + 1) + display_name + " ";
                     }
                 }
             }
-            final int sub = bundle.getInt("subscription", -1);
-            Object[] pdus = (Object[]) bundle.get("pdus");
+            final int sub = extras.getInt("subscription", -1);
+            Object[] pdus = (Object[]) extras.get("pdus");
             assert pdus != null;
             final SmsMessage[] messages = new SmsMessage[pdus.length];
             for (int i = 0; i < pdus.length; i++) {
-                messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    String format = extras.getString("format");
+                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i], format);
+                }
+                else {
+                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                }
                 if (is_default) {
                     ContentValues values = new ContentValues();
                     values.put(Telephony.Sms.ADDRESS, messages[i].getOriginatingAddress());
@@ -70,7 +78,6 @@ public class sms_receiver extends BroadcastReceiver {
                     values.put(Telephony.Sms.READ, "1");
                     context.getContentResolver().insert(Telephony.Sms.CONTENT_URI, values);
                 }
-
             }
             if (messages.length > 0) {
                 StringBuilder msgBody = new StringBuilder();
