@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -85,24 +87,23 @@ public class sms_send_receiver extends BroadcastReceiver {
         request_body.text =object;
         Gson gson = new Gson();
         String request_body_raw = gson.toJson(request_body);
-        RequestBody body = RequestBody.create(public_func.JSON, request_body_raw);
+        RequestBody body = RequestBody.create(request_body_raw,public_func.JSON);
         OkHttpClient okhttp_client = public_func.get_okhttp_obj();
-        assert bot_token != null;
         Request request = new Request.Builder().url(bot_token).method("POST", body).build();
         Call call = okhttp_client.newCall(request);
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 String error_message = "failed to send SMS:" + e.getMessage();
                 public_func.write_log(context, error_message);
                 public_func.write_log(context, "message body:\n" + request_body.text);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.code() != 200) {
                     assert response.body() != null;
-                    String error_message = "failed to send SMS:" + response.body().string();
+                    String error_message = "failed to send SMS:" + Objects.requireNonNull(response.body()).string();
                     public_func.write_log(context, error_message);
                     public_func.write_log(context, "message body:\n" + request_body.text);
                 }

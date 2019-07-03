@@ -15,7 +15,8 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+            tools:ignore="UselessParent">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -34,10 +35,11 @@
                     android:hint="@string/bot_token"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                        android:importantForAutofill="no" />
 
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
@@ -46,29 +48,34 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/trusted_phone_number"
                     android:maxLines="1"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+                    android:singleLine="true"
+                        android:importantForAutofill="no"
+                        tools:ignore="TextFields" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Switch
                 android:id="@+id/fallback_sms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/network_error_falls_back_to_sms" />
+                android:text="@string/network_error_falls_back_to_sms"
+                    tools:ignore="RtlSymmetry" />
 
             <Switch
                 android:id="@+id/battery_monitoring"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/battery_monitoring" />
+                android:text="@string/battery_monitoring"
+                    tools:ignore="RtlSymmetry" />
 
             <Switch
                 android:id="@+id/display_dual_sim"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/display_sim_card_alias_in_dual_card_mode" />
+                android:text="@string/display_sim_card_alias_in_dual_card_mode"
+                    tools:ignore="RtlSymmetry" />
             <Button
                 android:id="@+id/save"
                 android:layout_width="match_parent"

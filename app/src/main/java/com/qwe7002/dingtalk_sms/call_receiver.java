@@ -6,13 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+import androidx.core.content.PermissionChecker;
+
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -25,7 +26,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.support.v4.content.PermissionChecker.checkSelfPermission;
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
 public class call_receiver extends BroadcastReceiver {
     private static int slot;
@@ -40,6 +41,7 @@ public class call_receiver extends BroadcastReceiver {
                 TelephonyManager telephony = (TelephonyManager) context
                         .getSystemService(Context.TELEPHONY_SERVICE);
                 call_state_listener custom_phone_listener = new call_state_listener(context, slot, incoming_number);
+                assert telephony != null;
                 telephony.listen(custom_phone_listener, PhoneStateListener.LISTEN_CALL_STATE);
                 break;
             case "android.intent.action.SUBSCRIPTION_PHONE_STATE":
@@ -102,9 +104,8 @@ class call_state_listener extends PhoneStateListener {
         request_body.text =object;
         Gson gson = new Gson();
         String request_body_raw = gson.toJson(request_body);
-        RequestBody body = RequestBody.create(public_func.JSON, request_body_raw);
+        RequestBody body = RequestBody.create( request_body_raw,public_func.JSON);
         OkHttpClient okhttp_client = public_func.get_okhttp_obj();
-        assert bot_token != null;
         Request request = new Request.Builder().url(bot_token).method("POST", body).build();
         Call call = okhttp_client.newCall(request);
         call.enqueue(new Callback() {
@@ -112,7 +113,7 @@ class call_state_listener extends PhoneStateListener {
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 String error_message = "Send missed call error:" + e.getMessage();
                 public_func.write_log(context, error_message);
-                if (checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                if (checkSelfPermission(context, Manifest.permission.SEND_SMS) == PermissionChecker.PERMISSION_GRANTED) {
                     if (sharedPreferences.getBoolean("fallback_sms", false)) {
                         String msg_send_to = sharedPreferences.getString("trusted_phone_number", null);
                         if (msg_send_to != null) {
@@ -126,7 +127,7 @@ class call_state_listener extends PhoneStateListener {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.code() != 200) {
                     assert response.body() != null;
-                    String error_message = "Send missed call error:" + response.body().string();
+                    String error_message = "Send missed call error:" + Objects.requireNonNull(response.body()).string();
                     public_func.write_log(context, error_message);
                 }
             }

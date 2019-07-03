@@ -11,11 +11,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.PowerManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -53,7 +54,6 @@ public class main_activity extends AppCompatActivity {
         final Switch display_dual_sim_display_name = findViewById(R.id.display_dual_sim);
         final SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         String bot_token_save = sharedPreferences.getString("bot_token", "");
-        assert bot_token_save != null;
         if (sharedPreferences.getBoolean("initialized", false)) {
             public_func.start_service(context, sharedPreferences.getBoolean("battery_monitoring_switch", false));
         }
@@ -93,6 +93,7 @@ public class main_activity extends AppCompatActivity {
 
             PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                assert powerManager != null;
                 boolean has_ignored = powerManager.isIgnoringBatteryOptimizations(getPackageName());
                 if (!has_ignored) {
                     Intent intent = new Intent(ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
@@ -117,14 +118,14 @@ public class main_activity extends AppCompatActivity {
             request_body.text =object;
             Gson gson = new Gson();
             String request_body_raw = gson.toJson(request_body);
-            RequestBody body = RequestBody.create(public_func.JSON, request_body_raw);
+            RequestBody body = RequestBody.create(request_body_raw,public_func.JSON);
             OkHttpClient okhttp_client = public_func.get_okhttp_obj();
             Request request;
             try {
                 request = new Request.Builder().url(request_uri).method("POST", body).build();
             }catch (java.lang.IllegalArgumentException e){
                 progress_dialog.cancel();
-                Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG)
+                Snackbar.make(v, Objects.requireNonNull(e.getMessage()), Snackbar.LENGTH_LONG)
                         .show();
                 return;
             }
@@ -147,7 +148,7 @@ public class main_activity extends AppCompatActivity {
                     progress_dialog.cancel();
                     if (response.code() != 200) {
                         assert response.body() != null;
-                        String result = response.body().string();
+                        String result = Objects.requireNonNull(response.body()).string();
                         JsonObject result_obj = new JsonParser().parse(result).getAsJsonObject();
                         String error_message = "Send Message API Error:" + result_obj.get("description");
                         public_func.write_log(context, error_message);

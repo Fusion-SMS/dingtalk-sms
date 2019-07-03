@@ -8,11 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.BatteryManager;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.PermissionChecker;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -28,7 +29,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.content.Context.BATTERY_SERVICE;
-import static android.support.v4.content.PermissionChecker.checkSelfPermission;
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
 public class battery_monitoring_service extends Service {
     private battery_receiver battery_receiver = null;
@@ -119,13 +120,14 @@ class battery_receiver extends BroadcastReceiver {
                 prebody = prebody.append(context.getString(R.string.ac_disconnect));
                 break;
         }
+        assert batteryManager != null;
         String Content = prebody.append("\n").append(context.getString(R.string.current_battery_level)).append(batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)).append("%").toString();
         JsonObject object = new JsonObject();
         object.addProperty("content",Content);
         request_body.text =object;
         Gson gson = new Gson();
         String request_body_raw = gson.toJson(request_body);
-        RequestBody body = RequestBody.create(public_func.JSON, request_body_raw);
+        RequestBody body = RequestBody.create(request_body_raw,public_func.JSON);
         Request request = new Request.Builder().url(battery_monitoring_service.bot_token).method("POST", body).build();
         Call call = okhttp_client.newCall(request);
         call.enqueue(new Callback() {
@@ -134,7 +136,7 @@ class battery_receiver extends BroadcastReceiver {
                 String error_message = "Send battery info error:" + e.getMessage();
                 public_func.write_log(context, error_message);
                 if (action.equals(Intent.ACTION_BATTERY_LOW)) {
-                    if (checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                    if (checkSelfPermission(context, Manifest.permission.SEND_SMS) == PermissionChecker.PERMISSION_GRANTED) {
                         if (battery_monitoring_service.fallback) {
                             String msg_send_to = battery_monitoring_service.trusted_phone_number;
                             if (msg_send_to != null) {
@@ -149,7 +151,7 @@ class battery_receiver extends BroadcastReceiver {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.code() != 200) {
                     assert response.body() != null;
-                    String error_message = "Send battery info error:" + response.body().string();
+                    String error_message = "Send battery info error:" + Objects.requireNonNull(response.body()).string();
                     public_func.write_log(context, error_message);
                 }
             }

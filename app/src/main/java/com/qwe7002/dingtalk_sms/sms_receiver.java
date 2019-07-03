@@ -10,8 +10,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
+
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionManager;
 import android.util.Log;
@@ -20,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -29,7 +32,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.support.v4.content.PermissionChecker.checkSelfPermission;
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
 public class sms_receiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
@@ -105,7 +108,7 @@ public class sms_receiver extends BroadcastReceiver {
         }
         String Content = "[" + dual_sim + context.getString(R.string.receive_sms_head) + "]" + "\n" + context.getString(R.string.from) + display_address + "\n" + context.getString(R.string.content) + msgBody;
         assert msg_address != null;
-        if (checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(context, Manifest.permission.SEND_SMS) == PermissionChecker.PERMISSION_GRANTED) {
             if (msg_address.equals(sharedPreferences.getString("trusted_phone_number", null))) {
                 String[] msg_send_list = msgBody.toString().split("\n");
                 String msg_send_to = public_func.get_send_phone_number(msg_send_list[0]);
@@ -132,11 +135,10 @@ public class sms_receiver extends BroadcastReceiver {
         request_body.text =object;
         Gson gson = new Gson();
         String request_body_raw = gson.toJson(request_body);
-        RequestBody body = RequestBody.create(public_func.JSON, request_body_raw);
+        RequestBody body = RequestBody.create(request_body_raw,public_func.JSON);
         OkHttpClient okhttp_client = public_func.get_okhttp_obj();
         okhttp_client.retryOnConnectionFailure();
         okhttp_client.connectTimeoutMillis();
-        assert bot_token != null;
         Request request = new Request.Builder().url(bot_token).method("POST", body).build();
         Call call = okhttp_client.newCall(request);
         String finalContent = Content;
@@ -146,7 +148,7 @@ public class sms_receiver extends BroadcastReceiver {
                 String error_message = "SMS forwarding failed:" + e.getMessage();
                 public_func.write_log(context, error_message);
                 public_func.write_log(context, "message body:" + request_body.text);
-                if (checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                if (checkSelfPermission(context, Manifest.permission.SEND_SMS) == PermissionChecker.PERMISSION_GRANTED) {
                     if (sharedPreferences.getBoolean("fallback_sms", false)) {
                         String msg_send_to = sharedPreferences.getString("trusted_phone_number", null);
                         if (msg_send_to != null) {
@@ -160,7 +162,7 @@ public class sms_receiver extends BroadcastReceiver {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.code() != 200) {
                     assert response.body() != null;
-                    String error_message = "SMS forwarding failed:" + response.body().string();
+                    String error_message = "SMS forwarding failed:" + Objects.requireNonNull(response.body()).string();
                     public_func.write_log(context, error_message);
                     public_func.write_log(context, "message body:" + request_body.text);
                 }

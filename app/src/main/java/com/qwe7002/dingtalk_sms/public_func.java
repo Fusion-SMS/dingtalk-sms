@@ -16,7 +16,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
+
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -34,7 +36,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.support.v4.content.PermissionChecker.checkSelfPermission;
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
 class public_func {
     static final String log_tag = "DingTalk-sms";
@@ -111,6 +113,7 @@ class public_func {
             NotificationChannel channel = new NotificationChannel(notification_name, public_func.log_tag,
                     NotificationManager.IMPORTANCE_LOW);
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            assert manager != null;
             manager.createNotificationChannel(channel);
 
             notification = new Notification.Builder(context, notification_name)
@@ -198,7 +201,7 @@ class public_func {
 
     static String get_contact_name(Context context, String phone_number) {
         String contact_name = null;
-        if (checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PermissionChecker.PERMISSION_GRANTED) {
             try {
                 Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phone_number));
                 String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};

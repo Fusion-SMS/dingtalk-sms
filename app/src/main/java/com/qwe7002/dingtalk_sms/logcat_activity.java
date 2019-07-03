@@ -3,10 +3,12 @@ package com.qwe7002.dingtalk_sms;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.FileObserver;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import org.jetbrains.annotations.NotNull;
 
 public class logcat_activity extends AppCompatActivity {
 
@@ -42,7 +44,7 @@ public class logcat_activity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
         public_func.write_file(context, "error.log", "");
         return true;
     }
